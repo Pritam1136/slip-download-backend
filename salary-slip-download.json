@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "salary-slip-download",
+  "private_key_id": "cc3d6792f4b4a90fcb2d68ebd218bfb79ae3a953",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDRYTmy9VQUHPKB\nhAvPWmuiPhhnjmZt7bE7Iz7BA+Z2WzneHodMR8UbBkGS5zDSVEhyVaQZVGC6GKLz\nnXVDh8fW2UDi0e8w0oseIH7kyoGYZXRaXfYzCIMxpk87u9DDvQ5T1UcG3z7wvWgI\nkOC4KRS7LqFrzI8R9PSdbQ2jAS4ReGmhDDZ/XDk9cPu0OA+CzK9gr7671BGOoeWy\nmgN+VToMft6JrEocrvM97pZBPr1flbpuAi2GavvCrayjtg2RC2QsZPwv6drOoF8k\ny9tjx9bcDzrA485KRugR/3wC271l6dn4yXqQ8afGZFvAy76PZeFiQ6wEPx4X74Mq\nBLUV6e/JAgMBAAECggEAAU2OwNzYTZm9LpjQ7qo8N5HAWstJkDnlm53FXbPLAts1\nedA3J6kzV6Q100FfYz0FXbodCnqlHB4GzDz4xldOzeOjN5DL4Wy7UzrWNKadS4Kn\nczUuJjTRhYUTQtFmjq6bVg034xnk4or4iJkc343YjwOkGy92MnaTm8kvx7RnAifP\n8zF++BeIktdIXgn4MSjx+v0punGTCbr3Vv93iyHygKGKZLde5R1YYJ+X/elLCu83\n1box8MLuHc82t5YjZP4doYafLOoWco+iSFxnrpO4ISalQZoJWVh71ltB//kIay8F\nPY5CTd9vaDtUGS3LwhFRUrT2eqSuLamr1B49xvHLSwKBgQD6auFKtYxPaLTtmWG1\nYiUdKh24Mmw6CnZp+WEOeubnmkDe5QTtXIebH2XlYyB/TGYPyqGfqdqZZS5PdxKv\n7GfB/yPHG5OMw963A0qBNZQtgVGVgNtONFg/5jFh6ZMTTVk5uOPOXagOFmBYGf+X\nvnZTMHGwrK73v/CP18L65B32AwKBgQDWDCUrcgk+pnqkjX8PdCh6FnehTeW1bcds\nrlvfm91yM3HE5VngDicJDD5xx6fYCMUZ4Zsjs6KPTh7ju9ig1Iw543HwAkhEozz+\npzGbQ5sahyKo9z6eZOtMhYHs9+PhgxqqI/bq/jNZqUbd/AXV7XLrZMyHkWvaza5L\npX0chfgvQwKBgFTKwfRZGuR8kN7vE72mOOjyLNQFBs50Ynopvep4RR1hBtwycgOp\nVCV7cTZF5WgVR23LcASvL9zG/PJdYE9/Xfa7XLL7rG96lzwi+iRcLwtlgWl9E0Uc\nxlEEse30eB+ODktURpbG8bOrcf4C95+7Fze97JElN62eKWebaGMpwNdfAoGAET9/\nS0XwKsU9gr8IKxWgIV5oG25sgTcsZ7yRGK61pHsywrv8hwp86MS8z2xYQRdL0q8U\nUkcqZUPVR2KerS8TcaK7TqzQZ/+Dbb3JSIqlF/kluNnbiOX28/6aHp9HFKf84RLu\n1bbQKnxygnbJfZiZtxAzTwVP3JzQW7YlI8RD4IMCgYAi1M+nXBf8pns+YYPpsxkO\nNq+r1GBBqvwMaZHRioupf7KOSTmG/aetLDOCkoOWDC6XaOLU3yWhxlQUgLDT4mNB\nFlEuiC/O0ZN5ySHf+hKociI32wseMu02d4nvABuqFsR60WJBs32EWzQ9cTbsKLUW\n/4lxo9Q3u9Bow9jLWnlBqw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "googlesheetuser@salary-slip-download.iam.gserviceaccount.com",
+  "client_id": "117958321127301749327",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/googlesheetuser%40salary-slip-download.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
