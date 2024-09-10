@@ -18,7 +18,7 @@ let otpStore = {};
 // Send OTP to email
 app.post("/api/send-otp", (req, res) => {
   const { email } = req.body;
-  const otp = Math.floor(100000 + Math.random() * 90000000); // Generate 8-digit OTP
+  const otp = Math.floor(100000 + Math.random() * 900000); // Generate 8-digit OTP
   otpStore[email] = otp;
 
   // Create transporter for nodemailer
@@ -39,10 +39,8 @@ app.post("/api/send-otp", (req, res) => {
     to: email,
     subject: "Your OTP Code",
     text: `OTP Verification
-  Your OTP code is ${otp}
-    
+  Your OTP code is ${otp}.
   Please use this code to verify your account.
-    
   If you did not request this OTP, please ignore this email. `,
   };
 
