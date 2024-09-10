@@ -79,12 +79,14 @@ app.get("/api/sheet-data", async (req, res) => {
 
   try {
     const decoded = jwt.verify(token, secretKey);
-    console.log("working");
     const data = await getSpreadSheetValues({ spreadsheetId, sheetName });
-    console.log("working 2");
 
     const filteredData = data.filter((row) => row[3] === decoded.email);
-    res.json(filteredData);
+    if (filteredData[0][4] === "Yes") {
+      res.json(data);
+    } else {
+      res.json(filteredData);
+    }
   } catch (error) {
     res.status(500).json({ message: "Error fetching data" });
   }
