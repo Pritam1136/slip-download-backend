@@ -53,14 +53,36 @@ app.post("/api/send-otp", (req, res) => {
 });
 
 // Verify OTP and return JWT token
-app.post("/api/verify-otp", (req, res) => {
+app.post("/api/verify-otp", async (req, res) => {
   const { email, otp } = req.body;
 
   if (otpStore[email] && otpStore[email] == otp) {
-    // OTP is correct, generate a JWT token
-    const token = jwt.sign({ email }, secretKey, { expiresIn: "1h" });
-    delete otpStore[email]; // Clear OTP after successful login
-    return res.status(200).json({ token });
+    try {
+      const data = await getSpreadSheetValues({
+        spreadsheetId: process.env.SPREADSHEETID1,
+        sheetName: process.env.SHEETNAME,
+      });
+
+      const userData = data.find((row) => row[2] === email);
+
+      if (!userData) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const userId = userData[1];
+
+      // OTP is correct, generate a JWT token
+      const token = jwt.sign({ email, userId }, secretKey, {
+        expiresIn: "1h",
+      });
+      delete otpStore[email]; // Clear OTP after successful login
+
+      return res.status(200).json({ token });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "Error verifying OTP and fetching data" });
+    }
   } else {
     return res.status(401).json({ message: "Invalid OTP" });
   }
@@ -77,10 +99,11 @@ app.get("/api/sheet-data", async (req, res) => {
   try {
     const decoded = jwt.verify(token, secretKey);
     const data = await getSpreadSheetValues({
-      spreadsheetId: process.env.SPREADSHEETID1,
-      sheetName: process.env.SHEETNAME1,
+      spreadsheetId: process.env.SPREADSHEETID2,
+      sheetName: process.env.SHEETNAME,
     });
-    const filteredData = data.filter((row) => row[2] === decoded.email);
+
+    const filteredData = data.filter((row) => row[0] === decoded.userId);
 
     res.json(filteredData);
   } catch (error) {

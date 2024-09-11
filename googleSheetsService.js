@@ -23,7 +23,7 @@ async function getSpreadSheetValues({ spreadsheetId, sheetName }) {
     });
     return response.data.values;
   } catch (error) {
-    console.error("Error fetching data:", error); // Log detailed error
+    console.error("Error fetching data:", error);
     res
       .status(500)
       .json({ message: "Error fetching data", error: error.message });
