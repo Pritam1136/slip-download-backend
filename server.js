@@ -68,7 +68,6 @@ app.post("/api/verify-otp", (req, res) => {
 
 // Protected route
 app.get("/api/sheet-data", async (req, res) => {
-  const { spreadsheetId, sheetName } = req.query;
   const token = req.headers.authorization?.split(" ")[1];
 
   if (!token) {
@@ -77,7 +76,10 @@ app.get("/api/sheet-data", async (req, res) => {
 
   try {
     const decoded = jwt.verify(token, secretKey);
-    const data = await getSpreadSheetValues({ spreadsheetId, sheetName });
+    const data = await getSpreadSheetValues({
+      spreadsheetId: process.env.SPREADSHEETID1,
+      sheetName: process.env.SHEETNAME1,
+    });
     const filteredData = data.filter((row) => row[2] === decoded.email);
 
     res.json(filteredData);
