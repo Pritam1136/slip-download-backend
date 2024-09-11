@@ -94,6 +94,7 @@ const SheetData = async (req, res) => {
     });
 
     const filteredData = data.filter((row) => row[0] === decoded.userId);
+    filteredData.unshift(data[0]);
 
     res.json(filteredData);
   } catch (error) {
