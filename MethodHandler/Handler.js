@@ -3,14 +3,14 @@ const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 
+dotenv.config();
+
 const secretKey = process.env.SECRET_KEY;
 let otpStore = {};
 
-dotenv.config();
-
 const SendOtp = (req, res) => {
   const { email } = req.body;
-  const otp = Math.floor(100000 + Math.random() * 900000); // Generate 8-digit OTP
+  const otp = Math.floor(100000 + Math.random() * 900000); // Generate 6-digit OTP
   otpStore[email] = otp;
 
   // Create transporter for nodemailer
@@ -36,7 +36,7 @@ const SendOtp = (req, res) => {
     If you did not request this OTP, please ignore this email. `,
   };
 
-  transporter.sendMail(mailOptions, (error, info) => {
+  transporter.sendMail(mailOptions, (error, _info) => {
     if (error) {
       return res.status(500).json({ message: "Error sending OTP" });
     }
