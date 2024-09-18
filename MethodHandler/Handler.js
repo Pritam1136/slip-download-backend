@@ -8,8 +8,26 @@ dotenv.config();
 const secretKey = process.env.SECRET_KEY;
 let otpStore = {};
 
-const SendOtp = (req, res) => {
+const SendOtp = async (req, res) => {
   const { email } = req.body;
+
+  if (email) {
+    try {
+      const data = await getSpreadSheetValues({
+        spreadsheetId: process.env.SPREADSHEETID1,
+        sheetName: process.env.SHEETNAME,
+      });
+
+      const userData = data.find((row) => row[2] === email);
+
+      if (!userData) {
+        return res.status(404).json({ message: "User not found" });
+      }
+    } catch {
+      return res.status(500).json({ message: "No user with this mail" });
+    }
+  }
+
   const otp = Math.floor(100000 + Math.random() * 900000); // Generate 6-digit OTP
   otpStore[email] = otp;
 
