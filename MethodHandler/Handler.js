@@ -43,15 +43,17 @@ const SendOtp = async (req, res) => {
     },
   });
 
-  // Send email
+  // Send email with HTML
   const mailOptions = {
     from: "pritamroy1136@gmail.com",
     to: email,
     subject: "Your OTP Code",
-    text: `OTP Verification
-    Your OTP code is ${otp}.
-    Please use this code to verify your account.
-    If you did not request this OTP, please ignore this email. `,
+    html: `
+      <h1>OTP Verification</h1>
+      <p>Your OTP code is <strong>${otp}</strong>.</p>
+      <p>Please use this code to verify your account.</p>
+      <p>If you did not request this OTP, please ignore this email.</p>
+    `,
   };
 
   transporter.sendMail(mailOptions, (error, _info) => {
