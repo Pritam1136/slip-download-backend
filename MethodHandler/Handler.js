@@ -106,15 +106,50 @@ const SheetData = async (req, res) => {
 
   try {
     const decoded = jwt.verify(token, secretKey);
-    const data = await getSpreadSheetValues({
-      spreadsheetId: process.env.SPREADSHEETID2,
-      sheetName: process.env.SHEETNAME,
-    });
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    let allFilteredData = [];
 
-    const filteredData = data.filter((row) => row[0] === decoded.userId);
-    filteredData.unshift(data[0]);
+    for (const month of months) {
+      try {
+        const data = await getSpreadSheetValues({
+          spreadsheetId: process.env.SPREADSHEETID2,
+          sheetName: month,
+        });
 
-    res.json(filteredData);
+        // If sheet is empty or doesn't exist, it will throw an error or return an empty array.
+        if (data.length > 0) {
+          const filteredData = data.filter((row) => row[0] === decoded.userId);
+          if (filteredData.length > 0) {
+            filteredData.unshift(data[0]); // Add header row from the first sheet
+            allFilteredData = allFilteredData.concat(filteredData); // Combine data from different sheets
+          }
+        }
+      } catch (err) {
+        // Handle missing sheet silently or log it
+        console.log(
+          `Sheet for ${month} does not exist or error in fetching data`
+        );
+      }
+    }
+
+    if (allFilteredData.length === 0) {
+      return res.status(404).json({ message: "No data found" });
+    }
+
+    res.json(allFilteredData);
   } catch (error) {
     res.status(500).json({ message: "Error fetching data" });
   }
