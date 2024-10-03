@@ -1,11 +1,12 @@
-// server.js
 const express = require("express");
 const cors = require("cors");
 const { SendOtp, verifyOtp, SheetData } = require("./MethodHandler/Handler");
 const cron = require("node-cron");
+const { checkAndSendEmails } = require("./MethodHandler/checkAndSendEmails");
 
 const app = express();
 const port = 5000;
+
 app.use(express.json());
 app.use(cors());
 
@@ -18,8 +19,10 @@ app.post("/api/verify-otp", verifyOtp);
 // Protected route
 app.get("/api/sheet-data", SheetData);
 
-cron.schedule("10 * * * * *", () => {
-  console.log("running a task every minute");
+// Schedule the task to run at the start of every month
+cron.schedule("0 0 1 * *", () => {
+  console.log("Running salary email check for the month...");
+  checkAndSendEmails();
 });
 
 app.listen(port, () => {
