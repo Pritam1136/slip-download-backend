@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const { SendOtp, verifyOtp, SheetData } = require("./MethodHandler/Handler");
 const cron = require("node-cron");
-const { checkAndSendEmails } = require("./MethodHandler/checkAndSendEmails");
+const { checkAndSendEmails } = require("./MethodHandler/CheckAndSendEmails");
 
 const app = express();
 const port = 5000;
