@@ -11,6 +11,9 @@ let emailSentLog = {};
 async function sendSalaryMail(employee, salaryData) {
   const transporter = nodemailer.createTransport({
     service: "Gmail",
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
     auth: {
       user: process.env.EMAIL_USERNAME,
       pass: process.env.EMAIL_PASSWORD,
@@ -25,7 +28,7 @@ async function sendSalaryMail(employee, salaryData) {
       <h1>Salary Slip</h1>
       <p>Dear ${employee[0]},</p>
       <p>Your salary details for ${salaryData[1]} ${salaryData[2]} have been uploaded.</p>
-      <p>Net Pay: <strong>${salaryData[22]}</strong></p>
+      <p>Net Pay: <strong>${salaryData[23]}</strong></p>
     `,
   };
 
@@ -43,20 +46,27 @@ async function checkAndSendEmails() {
     }); // e.g., 'Oct'
     const currentYear = new Date().getFullYear();
 
+    // Reset email log at the beginning of a new month
+    if (!emailSentLog[currentYear]) {
+      emailSentLog[currentYear] = {};
+    }
+    if (!emailSentLog[currentYear][currentMonth]) {
+      emailSentLog[currentYear][currentMonth] = {};
+    }
+
     // Fetch employee data from SPREADSHEETID1 (sheet with employee info)
     const employees = await getSpreadSheetValues({
       spreadsheetId: process.env.SPREADSHEETID1,
       sheetName: process.env.SHEETNAME, // Example: 'Sheet1'
     });
 
+    employees.shift();
+
     for (const employee of employees) {
       const employeeId = employee[1]; // Employee ID
 
       // Check if the email for the current month and year has already been sent
-      if (
-        emailSentLog[employeeId] &&
-        emailSentLog[employeeId].includes(`${currentMonth}-${currentYear}`)
-      ) {
+      if (emailSentLog[currentYear][currentMonth][employeeId]) {
         continue; // Skip sending if already sent
       }
 
@@ -76,10 +86,7 @@ async function checkAndSendEmails() {
         await sendSalaryMail(employee, employeeSalaryData);
 
         // Track the email sent
-        if (!emailSentLog[employeeId]) {
-          emailSentLog[employeeId] = [];
-        }
-        emailSentLog[employeeId].push(`${currentMonth}-${currentYear}`);
+        emailSentLog[currentYear][currentMonth][employeeId] = true;
       }
     }
   } catch (error) {

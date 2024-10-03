@@ -20,7 +20,7 @@ app.post("/api/verify-otp", verifyOtp);
 app.get("/api/sheet-data", SheetData);
 
 // Schedule the task to run at the start of every month
-cron.schedule("0 0 1 * *", () => {
+cron.schedule("0 8 * * *", () => {
   console.log("Running salary email check for the month...");
   checkAndSendEmails();
 });
