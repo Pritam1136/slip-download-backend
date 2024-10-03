@@ -28,7 +28,6 @@ async function sendSalaryMail(employee, salaryData) {
       <h1>Salary Slip</h1>
       <p>Dear ${employee[0]},</p>
       <p>Your salary details for ${salaryData[1]} ${salaryData[2]} have been uploaded.</p>
-      <p>Net Pay: <strong>${salaryData[23]}</strong></p>
     `,
   };
 
