@@ -56,7 +56,7 @@ async function checkAndSendEmails() {
     // Fetch employee data from SPREADSHEETID1 (sheet with employee info)
     const employees = await getSpreadSheetValues({
       spreadsheetId: process.env.SPREADSHEETID1,
-      sheetName: process.env.SHEETNAME, // Example: 'Sheet1'
+      sheetName: process.env.SHEETNAME,
     });
 
     employees.shift();

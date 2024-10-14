@@ -124,6 +124,11 @@ const SheetData = async (req, res) => {
     ];
     let allFilteredData = [];
 
+    const data1 = await getSpreadSheetValues({
+      spreadsheetId: process.env.SPREADSHEETID1,
+      sheetName: process.env.SHEETNAME,
+    });
+
     for (const month of months) {
       try {
         const data = await getSpreadSheetValues({
@@ -131,18 +136,28 @@ const SheetData = async (req, res) => {
           sheetName: month,
         });
 
-        // If sheet is empty or doesn't exist, it will throw an error or return an empty array.
         if (data.length > 0) {
           const filteredData = data.filter((row) => row[0] === decoded.userId);
+          const filteredData1 = data1.filter(
+            (row) => row[1] === decoded.userId
+          );
+
           if (filteredData.length > 0) {
-            filteredData.unshift(data[0]); // Add header row from the first sheet
-            allFilteredData = allFilteredData.concat(filteredData); // Combine data from different sheets
+            // Insert the month in the correct position
+            filteredData.forEach((row) => row.splice(1, 0, month));
+
+            // Flatten the filteredData1 array and merge with filteredData
+            const flatFilteredData1 = filteredData1.flat();
+            filteredData.forEach((row) => {
+              row.push(...flatFilteredData1);
+            });
+
+            allFilteredData = allFilteredData.concat(filteredData);
           }
         }
       } catch (err) {
-        // Handle missing sheet silently or log it
         console.log(
-          `Sheet for ${month} does not exist or error in fetching data`
+          `Sheet for ${month} does not exist or error: ${err.message}`
         );
       }
     }
@@ -151,6 +166,7 @@ const SheetData = async (req, res) => {
       return res.status(404).json({ message: "No data found" });
     }
 
+    console.log(allFilteredData);
     res.json(allFilteredData);
   } catch (error) {
     res.status(500).json({ message: "Error fetching data" });
