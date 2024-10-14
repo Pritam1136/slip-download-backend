@@ -166,7 +166,6 @@ const SheetData = async (req, res) => {
       return res.status(404).json({ message: "No data found" });
     }
 
-    console.log(allFilteredData);
     res.json(allFilteredData);
   } catch (error) {
     res.status(500).json({ message: "Error fetching data" });
