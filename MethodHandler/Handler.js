@@ -143,7 +143,7 @@ const SheetData = async (req, res) => {
           );
 
           if (filteredData.length > 0) {
-            // Insert the month in the correct position
+            // Insert the month in the 1st index
             filteredData.forEach((row) => row.splice(1, 0, month));
 
             // Flatten the filteredData1 array and merge with filteredData
