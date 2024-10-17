@@ -155,7 +155,7 @@ const SheetData = async (req, res) => {
           );
 
           if (userSalaryData.length > 0 && userEmployeeData.length > 0) {
-            const employeeDetails = userEmployeeData[0]; // Assuming a single row per employee
+            const employeeDetails = userEmployeeData[0];
 
             userSalaryData.forEach((salaryRow) => {
               const formattedRow = Array(24).fill(null); // Initialize array for 24 fields
@@ -215,7 +215,6 @@ const SheetData = async (req, res) => {
       return res.status(404).json({ message: "No data found" });
     }
 
-    console.log(allFilteredData);
     res.json(allFilteredData);
   } catch (error) {
     res.status(500).json({ message: "Error fetching data" });
