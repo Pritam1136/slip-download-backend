@@ -2,6 +2,7 @@ const { getSpreadSheetValues } = require("../googleSheetsService");
 const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
+const { schema } = require("../schema/schema");
 
 dotenv.config();
 
@@ -99,6 +100,25 @@ const verifyOtp = async (req, res) => {
   }
 };
 
+const mapData = (schema, employeeData, salaryData, month) => {
+  const mappedData = Array(24).fill(null); // Initialize array with null values for 24 fields
+
+  for (const key in schema) {
+    const { source, key: fieldKey, index, value } = schema[key];
+
+    // Set value based on source
+    if (source === "employee") {
+      mappedData[index] = employeeData ? employeeData[fieldKey] : null;
+    } else if (source === "salary") {
+      mappedData[index] = salaryData ? salaryData[fieldKey] : null;
+    } else if (source === "static" && value === "month") {
+      mappedData[index] = month;
+    }
+  }
+
+  return mappedData;
+};
+
 const SheetData = async (req, res) => {
   const token = req.headers.authorization?.split(" ")[1];
 
@@ -122,14 +142,16 @@ const SheetData = async (req, res) => {
       "Nov",
       "Dec",
     ];
+
     let allFilteredData = [];
 
-    // Fetch the employee master data (data1)
+    // Fetch employee master data
     const employeeData = await getSpreadSheetValues({
       spreadsheetId: process.env.SPREADSHEETID1,
       sheetName: process.env.SHEETNAME,
     });
 
+    // Extract employee headers and rows
     const employeeHeaders = employeeData[0];
     const employeeRows = employeeData.slice(1);
 
@@ -142,65 +164,38 @@ const SheetData = async (req, res) => {
         });
 
         if (salaryData.length > 0) {
+          // Extract salary headers and rows
           const salaryHeaders = salaryData[0];
           const salaryRows = salaryData.slice(1);
 
-          // Filter salary and employee data for the specific user
+          // Filter data for the current user
           const userSalaryData = salaryRows.filter(
             (row) => row[salaryHeaders.indexOf("EmployeId")] === decoded.userId
           );
-          const userEmployeeData = employeeRows.filter(
+          const userEmployeeData = employeeRows.find(
             (row) =>
               row[employeeHeaders.indexOf("EmployeId")] === decoded.userId
           );
 
-          if (userSalaryData.length > 0 && userEmployeeData.length > 0) {
-            const employeeDetails = userEmployeeData[0];
-
+          if (userSalaryData.length > 0 && userEmployeeData) {
             userSalaryData.forEach((salaryRow) => {
-              const formattedRow = Array(24).fill(null); // Initialize array for 24 fields
+              const employeeDetails = Object.fromEntries(
+                employeeHeaders.map((header, i) => [
+                  header,
+                  userEmployeeData[i],
+                ])
+              );
+              const salaryDetails = Object.fromEntries(
+                salaryHeaders.map((header, i) => [header, salaryRow[i]])
+              );
 
-              formattedRow[0] =
-                employeeDetails[employeeHeaders.indexOf("EmployeId")]; // employeeId
-              formattedRow[3] =
-                employeeDetails[employeeHeaders.indexOf("Name")]; // employee name
-              formattedRow[4] =
-                employeeDetails[employeeHeaders.indexOf("Designation")]; // designation
-              formattedRow[5] =
-                employeeDetails[employeeHeaders.indexOf("Departmant")]; // department
-              formattedRow[6] =
-                employeeDetails[employeeHeaders.indexOf("Date of Joining")]; // date of joining
-              formattedRow[11] =
-                employeeDetails[employeeHeaders.indexOf("Banc name")]; // bank name
-              formattedRow[12] =
-                employeeDetails[employeeHeaders.indexOf("Bank  acc no")]; // bank A/C number
-              formattedRow[13] =
-                employeeDetails[employeeHeaders.indexOf("Pan no")]; // PAN number
-
-              formattedRow[1] = month;
-              formattedRow[2] = salaryRow[salaryHeaders.indexOf("Year")]; // year
-              formattedRow[7] = salaryRow[salaryHeaders.indexOf("UAN")]; // UAN
-              formattedRow[8] =
-                salaryRow[salaryHeaders.indexOf("Total working Days")]; // total working days
-              formattedRow[9] = salaryRow[salaryHeaders.indexOf("LOP Days")]; // LOP days
-              formattedRow[10] = salaryRow[salaryHeaders.indexOf("Paid Days")]; // paid days
-              formattedRow[14] = salaryRow[salaryHeaders.indexOf("Basic")]; // Basic
-              formattedRow[15] = salaryRow[salaryHeaders.indexOf("Har")]; // HRA
-              formattedRow[16] =
-                salaryRow[salaryHeaders.indexOf("Other allowance")]; // other allowance
-              formattedRow[17] = salaryRow[salaryHeaders.indexOf("EPF")]; // EPF
-              formattedRow[18] =
-                salaryRow[salaryHeaders.indexOf("Professional Tax")]; // Professional tax
-              formattedRow[19] =
-                salaryRow[salaryHeaders.indexOf("Health Insurance")]; // Health insurance
-              formattedRow[20] = salaryRow[salaryHeaders.indexOf("TDS")]; // TDS
-              formattedRow[21] =
-                salaryRow[salaryHeaders.indexOf("Gross salary")]; // gross salary
-              formattedRow[22] =
-                salaryRow[salaryHeaders.indexOf("Reimbursement")]; // Reimbursement
-              formattedRow[23] = salaryRow[salaryHeaders.indexOf("Net pay")]; // Net pay
-
-              allFilteredData.push(formattedRow);
+              const mappedRow = mapData(
+                schema,
+                employeeDetails,
+                salaryDetails,
+                month
+              );
+              allFilteredData.push(mappedRow);
             });
           }
         }

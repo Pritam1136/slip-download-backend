@@ -1,0 +1,28 @@
+const schema = {
+  employeeId: { source: "employee", key: "EmployeId", index: 0 },
+  month: { source: "static", value: "month", index: 1 },
+  year: { source: "salary", key: "Year", index: 2 },
+  employeeName: { source: "employee", key: "Name", index: 3 },
+  designation: { source: "employee", key: "Designation", index: 4 },
+  department: { source: "employee", key: "Departmant", index: 5 },
+  dateOfJoining: { source: "employee", key: "Date of Joining", index: 6 },
+  UAN: { source: "salary", key: "UAN", index: 7 },
+  totalWorkingDays: { source: "salary", key: "Total working Days", index: 8 },
+  lopDays: { source: "salary", key: "LOP Days", index: 9 },
+  paidDays: { source: "salary", key: "Paid Days", index: 10 },
+  bankName: { source: "employee", key: "Banc name", index: 11 },
+  bankAccNo: { source: "employee", key: "Bank  acc no", index: 12 },
+  panNo: { source: "employee", key: "Pan no", index: 13 },
+  basic: { source: "salary", key: "Basic", index: 14 },
+  hra: { source: "salary", key: "Har", index: 15 },
+  otherAllowance: { source: "salary", key: "Other allowance", index: 16 },
+  epf: { source: "salary", key: "EPF", index: 17 },
+  professionalTax: { source: "salary", key: "Professional Tax", index: 18 },
+  healthInsurance: { source: "salary", key: "Health Insurance", index: 19 },
+  tds: { source: "salary", key: "TDS", index: 20 },
+  grossSalary: { source: "salary", key: "Gross salary", index: 21 },
+  reimbursement: { source: "salary", key: "Reimbursement", index: 22 },
+  netPay: { source: "salary", key: "Net pay", index: 23 },
+};
+
+module.exports = { schema };
