@@ -3,6 +3,8 @@ const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const { schema } = require("../schema/schema");
+const fs = require("fs");
+const path = require("path");
 
 dotenv.config();
 
@@ -155,54 +157,64 @@ const SheetData = async (req, res) => {
     const employeeHeaders = employeeData[0];
     const employeeRows = employeeData.slice(1);
 
-    for (const month of months) {
-      try {
-        // Fetch salary-related data for the month
-        const salaryData = await getSpreadSheetValues({
-          spreadsheetId: process.env.SPREADSHEETID2,
-          sheetName: month,
-        });
+    // Load the years.json file to get all the sheet IDs for different years
+    const yearsFilePath = path.join(__dirname, "../schema/years.json");
+    const yearsData = JSON.parse(fs.readFileSync(yearsFilePath, "utf-8"));
 
-        if (salaryData.length > 0) {
-          // Extract salary headers and rows
-          const salaryHeaders = salaryData[0];
-          const salaryRows = salaryData.slice(1);
+    // Loop through each year in years.json
+    for (const [year, spreadsheetId] of Object.entries(yearsData)) {
+      console.log(`Fetching data for year: ${year}`);
 
-          // Filter data for the current user
-          const userSalaryData = salaryRows.filter(
-            (row) => row[salaryHeaders.indexOf("EmployeId")] === decoded.userId
-          );
-          const userEmployeeData = employeeRows.find(
-            (row) =>
-              row[employeeHeaders.indexOf("EmployeId")] === decoded.userId
-          );
+      for (const month of months) {
+        try {
+          // Fetch salary-related data for the current month and year
+          const salaryData = await getSpreadSheetValues({
+            spreadsheetId: spreadsheetId,
+            sheetName: month,
+          });
 
-          if (userSalaryData.length > 0 && userEmployeeData) {
-            userSalaryData.forEach((salaryRow) => {
-              const employeeDetails = Object.fromEntries(
-                employeeHeaders.map((header, i) => [
-                  header,
-                  userEmployeeData[i],
-                ])
-              );
-              const salaryDetails = Object.fromEntries(
-                salaryHeaders.map((header, i) => [header, salaryRow[i]])
-              );
+          if (salaryData.length > 0) {
+            // Extract salary headers and rows
+            const salaryHeaders = salaryData[0];
+            const salaryRows = salaryData.slice(1);
 
-              const mappedRow = mapData(
-                schema,
-                employeeDetails,
-                salaryDetails,
-                month
-              );
-              allFilteredData.push(mappedRow);
-            });
+            // Filter data for the current user
+            const userSalaryData = salaryRows.filter(
+              (row) =>
+                row[salaryHeaders.indexOf("EmployeId")] === decoded.userId
+            );
+            const userEmployeeData = employeeRows.find(
+              (row) =>
+                row[employeeHeaders.indexOf("EmployeId")] === decoded.userId
+            );
+
+            if (userSalaryData.length > 0 && userEmployeeData) {
+              userSalaryData.forEach((salaryRow) => {
+                const employeeDetails = Object.fromEntries(
+                  employeeHeaders.map((header, i) => [
+                    header,
+                    userEmployeeData[i],
+                  ])
+                );
+                const salaryDetails = Object.fromEntries(
+                  salaryHeaders.map((header, i) => [header, salaryRow[i]])
+                );
+
+                const mappedRow = mapData(
+                  schema,
+                  employeeDetails,
+                  salaryDetails,
+                  month
+                );
+                allFilteredData.push(mappedRow);
+              });
+            }
           }
+        } catch (err) {
+          console.log(
+            `Sheet for ${month} in year ${year} does not exist or error: ${err.message}`
+          );
         }
-      } catch (err) {
-        console.log(
-          `Sheet for ${month} does not exist or error: ${err.message}`
-        );
       }
     }
 
@@ -217,3 +229,4 @@ const SheetData = async (req, res) => {
 };
 
 module.exports = { SendOtp, verifyOtp, SheetData };
+// "build": "cd ../client && npm install && npm run build"
