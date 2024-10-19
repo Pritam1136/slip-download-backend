@@ -11,9 +11,6 @@ const port = 5000;
 app.use(express.json());
 app.use(cors());
 
-// Serve static files from the React app
-app.use(express.static(path.join(__dirname, "../client/dist")));
-
 // Send OTP to email
 app.post("/api/send-otp", SendOtp);
 
@@ -23,9 +20,9 @@ app.post("/api/verify-otp", verifyOtp);
 // Protected route
 app.get("/api/sheet-data", SheetData);
 
-// Serve React app for any other route
+app.use(express.static(path.join(__dirname, "public")));
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/dist", "index.html"));
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 // Schedule the task to run at the start of every month
