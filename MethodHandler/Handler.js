@@ -229,4 +229,3 @@ const SheetData = async (req, res) => {
 };
 
 module.exports = { SendOtp, verifyOtp, SheetData };
-// "build": "cd ../client && npm install && npm run build"
