@@ -46,16 +46,43 @@ const SendOtp = async (req, res) => {
     },
   });
 
-  // Send email with HTML
   const mailOptions = {
     from: "pritamroy1136@gmail.com",
     to: email,
-    subject: "Your OTP Code",
+    subject: "Your OTP Code - Secure Account Verification",
     html: `
-      <h1>OTP Verification</h1>
-      <p>Your OTP code is <strong>${otp}</strong>.</p>
-      <p>Please use this code to verify your account.</p>
-      <p>If you did not request this OTP, please ignore this email.</p>
+      <body style="font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4;">
+        <table align="center" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; margin: 2rem auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+          <tr>
+            <td style="padding: 20px; background-color: #a651eb; color: white; text-align: center;">
+              <h1 style="margin: 0;">OTP Verification</h1>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 20px;">
+              <p style="font-size: 16px; color: #333;">Hello,</p>
+              <p style="font-size: 16px; color: #333;">
+                You have requested to verify your account. Please use the OTP code below to complete your verification.
+              </p>
+              <div style="text-align: center; margin: 20px 0;">
+                <span id="otpCode" style="display: inline-block; font-size: 24px; font-weight: bold; color: white; padding: 10px 20px; background-color: #a651eb; border: 1px solid white; border-radius: 8px;">${otp}</span>
+              </div>
+              <p style="font-size: 14px; color: #333;">
+                This code is valid for 10 minutes. If you did not request this OTP, please ignore this email or contact our support team.
+              </p>
+              <p style="font-size: 14px; color: #333;">Thank you for using our service!</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 20px; background-color: #f4f4f4; text-align: center;">
+              <p style="font-size: 12px; color: #999;">
+                If you have any questions, feel free to reply to this email or contact our support at support@example.com.
+              </p>
+              <p style="font-size: 12px; color: #999;">© ${new Date().getFullYear()} Forwardcode Techstudio. All rights reserved.</p>
+            </td>
+          </tr>
+        </table>
+      </body>
     `,
   };
 
