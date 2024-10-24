@@ -32,7 +32,8 @@ const SendOtp = async (req, res) => {
   }
 
   const otp = Math.floor(100000 + Math.random() * 900000); // Generate 6-digit OTP
-  otpStore[email] = otp;
+  const expiresAt = Date.now() + 10 * 60 * 1000; // Set expiration time to 10 minutes from now
+  otpStore[email] = { otp, expiresAt };
 
   // Create transporter for nodemailer
   const transporter = nodemailer.createTransport({
@@ -143,35 +144,46 @@ const SendOtp = async (req, res) => {
 const verifyOtp = async (req, res) => {
   const { email, otp } = req.body;
 
-  if (otpStore[email] && otpStore[email] == otp) {
-    try {
-      const data = await getSpreadSheetValues({
-        spreadsheetId: process.env.SPREADSHEETID1,
-        sheetName: process.env.SHEETNAME,
-      });
+  if (otpStore[email]) {
+    const { otp: storedOtp, expiresAt } = otpStore[email];
 
-      const userData = data.find((row) => row[2] === email);
+    if (Date.now() > expiresAt) {
+      delete otpStore[email]; // OTP expired, remove it
+      return res.status(401).json({ message: "OTP expired" });
+    }
 
-      if (!userData) {
-        return res.status(404).json({ message: "User not found" });
+    if (storedOtp == otp) {
+      try {
+        const data = await getSpreadSheetValues({
+          spreadsheetId: process.env.SPREADSHEETID1,
+          sheetName: process.env.SHEETNAME,
+        });
+
+        const userData = data.find((row) => row[2] === email);
+
+        if (!userData) {
+          return res.status(404).json({ message: "User not found" });
+        }
+
+        const userId = userData[1];
+
+        // OTP is correct, generate a JWT token
+        const token = jwt.sign({ email, userId }, secretKey, {
+          expiresIn: "1h",
+        });
+        delete otpStore[email]; // Clear OTP after successful login
+
+        return res.status(200).json({ token });
+      } catch (error) {
+        return res
+          .status(500)
+          .json({ message: "Error verifying OTP and fetching data" });
       }
-
-      const userId = userData[1];
-
-      // OTP is correct, generate a JWT token
-      const token = jwt.sign({ email, userId }, secretKey, {
-        expiresIn: "1h",
-      });
-      delete otpStore[email]; // Clear OTP after successful login
-
-      return res.status(200).json({ token });
-    } catch (error) {
-      return res
-        .status(500)
-        .json({ message: "Error verifying OTP and fetching data" });
+    } else {
+      return res.status(401).json({ message: "Invalid OTP" });
     }
   } else {
-    return res.status(401).json({ message: "Invalid OTP" });
+    return res.status(400).json({ message: "OTP not found for this email" });
   }
 };
 
