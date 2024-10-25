@@ -50,7 +50,6 @@ async function sendSalaryMail(employee, salaryData) {
               <p style="font-size: 14px; color: #333;">
                 You can download or view your detailed salary slip through our portal. If you have any questions, feel free to reach out to our HR team.
               </p>
-              <p style="font-size: 14px; color: #333;">Thank you for your hard work and dedication!</p>
             </td>
           </tr>
           <!-- Footer with Company Info -->
