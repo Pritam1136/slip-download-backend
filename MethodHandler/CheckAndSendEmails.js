@@ -24,7 +24,7 @@ async function sendSalaryMail(employee, salaryData) {
   const mailOptions = {
     from: process.env.EMAIL_USERNAME,
     to: employee[2], // Employee's email
-    subject: `Salary Slip for ${salaryData[1]} ${salaryData[2]}`, // Month and Year
+    subject: `Salary Slip for ${salaryData[1]} ${salaryData[2]} uploaded`,
     html: `
       <body style="font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4;">
         <table align="center" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; margin: 2rem auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
