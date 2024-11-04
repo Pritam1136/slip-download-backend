@@ -31,8 +31,8 @@ const SendOtp = async (req, res) => {
     }
   }
 
-  const otp = Math.floor(1000 + Math.random() * 9000); // Generate 4-digit OTP
-  const expiresAt = Date.now() + 10 * 60 * 1000; // Set expiration time to 10 minutes from now
+  const otp = Math.floor(1000 + Math.random() * 9000);
+  const expiresAt = Date.now() + 10 * 60 * 1000;
   otpStore[email] = { otp, expiresAt };
 
   // Create transporter for nodemailer
@@ -142,7 +142,7 @@ const SendOtp = async (req, res) => {
                         You have requested to verify your account. Please use the OTP code below to complete your verification.
                       </p>
                       <p>
-                                     This code is valid for 10 minutes. If you did not request this OTP, please ignore this email or contact our support team.
+                        This code is valid for 10 minutes. If you did not request this OTP, please ignore this email or contact our support team.
                       </p>
                     </td>
                   </tr>
