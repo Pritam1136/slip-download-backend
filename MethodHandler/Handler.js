@@ -55,81 +55,234 @@ const SendOtp = async (req, res) => {
     to: email,
     subject: "Your OTP Code - Secure Account Verification",
     html: `
-    <body style="font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4;">
-      <table align="center" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; margin: 2rem auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
-        <!-- Header Section with Logo -->
-        <tr>
-          <td style="padding: 20px; background-color: #ffffff; text-align: center;">
-            <img src="${imageSrc}" alt="logo" style="width: 90px; height: 90px; background-color: white; border-radius: 50%; margin-bottom: 1rem;" />
-          </td>
-        </tr>
-        <tr>
-          <td style="padding: 20px; background-color: #a651eb; color: white; text-align: center;">
-            <h1 style="margin: 0;">OTP Verification</h1>
-          </td>
-        </tr>
-        <tr>
-          <td style="padding: 20px;">
-            <p style="font-size: 16px; color: #333;">Hello,</p>
-            <p style="font-size: 16px; color: #333;">
-              You have requested to verify your account. Please use the OTP code below to complete your verification.
-            </p>
-            <div style="text-align: center; margin: 20px 0;">
-              <span id="otpCode" style="display: inline-block; font-size: 24px; font-weight: bold; color: white; padding: 10px 20px; background-color: #a651eb; border: 1px solid white; border-radius: 8px;">${otp}</span>
-            </div>
-            <p style="font-size: 14px; color: #333;">
-              This code is valid for 10 minutes. If you did not request this OTP, please ignore this email or contact our support team.
-            </p>
-            <p style="font-size: 14px; color: #333;">Thank you for using our service!</p>
-          </td>
-        </tr>
+    <body
+    style="
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: aliceblue;
+    "
+  >
+    <table
+      role="presentation"
+      width="100%"
+      cellpadding="0"
+      cellspacing="0"
+      style="background-color: aliceblue"
+    >
+      <tr>
+        <td align="center">
+          <table
+            role="presentation"
+            width="800"
+            cellpadding="0"
+            cellspacing="0"
+            style="
+              margin: 3rem auto;
+              background-color: #ffffff;
+              border-radius: 8px;
+              text-align: center;
+            "
+          >
+            <!-- Header Section -->
+            <tr>
+              <td style="padding: 1rem">
+                <img
+                  src="${imageSrc}"
+                  alt="logo"
+                  width="90"
+                  height="90"
+                  style="border-radius: 50%; background-color: white"
+                />
+                <p style="font-size: 1.6rem; margin: 2px">OTP Verification</p>
+              </td>
+            </tr>
 
-        <!-- Support Info Section -->
-        <tr>
-          <td style="padding: 1rem;">
-            <table width="100%" style="text-align: start;">
-              <tr>
-                <td width="90" style="padding-right: 1rem;">
-                  <img src="${imageSrc}" alt="Forwardcode TechStudio" style="width: 90px; height: 90px; background-color: white; margin-bottom: 1rem;">
-                </td>
-                <td>
-                  <p style="font-size: 14px; font-weight: bold; color: #333;">TEAM HR</p>
-                  <p style="font-size: 12px; color: #5e5e5e;">Forwardcode TechStudio</p>
-                  <p style="font-size: 12px; color: #5e5e5e;">Jamshedpur, JH - 831018</p>
-                  <p style="font-size: 12px;">hr@forwardcode.in</p>
-                  <p style="font-size: 12px; color: black;">
-                    Check what's new: 
-                    <a href="https://forwardcode.in" style="color: #007bff;">https://forwardcode.in</a>
-                  </p>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
+            <!-- Activation Code Section -->
+            <tr>
+              <td align="center" style="padding: 3rem 5rem">
+                <table
+                  role="presentation"
+                  width="100%"
+                  cellpadding="0"
+                  cellspacing="0"
+                >
+                  <tr>
+                    <td align="center" style="padding: 1rem 0">
+                      <table
+                        role="presentation"
+                        cellpadding="0"
+                        cellspacing="0"
+                        style="
+                          border: 1px dashed rgba(52, 144, 236, 1);
+                          border-radius: 60px;
+                          padding: 12px 40px;
+                        "
+                      >
+                        <tr>
+                          <td
+                            style="
+                              color: rgba(52, 144, 236, 1);
+                              font-family: Monaco, sans-serif;
+                              font-size: 1.5rem;
+                            "
+                          >
+                           ${otp}
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      align="center"
+                      style="font-size: 13px; color: #5e5e5e; padding: 1rem 0"
+                    >
+                      <p>
+                        You have requested to verify your account. Please use the OTP code below to complete your verification.
+                      </p>
+                      <p>
+                                     This code is valid for 10 minutes. If you did not request this OTP, please ignore this email or contact our support team.
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
 
-        <!-- Disclaimer Section -->
-        <tr>
-          <td style="padding: 1rem; background-color: #f4f4f4; text-align: center;">
-            <p style="font-size: 8px; margin: 0;">PLEASE CONSIDER THE ENVIRONMENT BEFORE PRINTING THIS EMAIL.</p>
-            <p style="font-size: 8px; margin: 0;">
-              THIS MESSAGE IS INTENDED ONLY FOR THE USE OF THE INDIVIDUAL OR ENTITY TO WHICH IT IS ADDRESSED AND MAY CONTAIN 
-              INFORMATION THAT IS PRIVILEGED, CONFIDENTIAL AND EXEMPT FROM DISCLOSURE UNDER APPLICABLE LAW.
-              IF YOU ARE NOT THE INTENDED RECIPIENT, YOU ARE HEREBY NOTIFIED THAT ANY DISSEMINATION OR COPYING IS STRICTLY PROHIBITED.
-            </p>
-          </td>
-        </tr>
+            <!-- Social Links Section -->
+            <tr>
+              <td align="center" style="padding: 1.5rem">
+                <table role="presentation" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td align="center" style="padding: 0 8px">
+                      <a href="#"
+                        ><img
+                          src="https://www.sendible.com/hs-fs/hubfs/blog-import/2020/20-08-Aug/sm-icons-facebook-logo.png?width=180&name=sm-icons-facebook-logo.png"
+                          alt="Facebook"
+                          width="24"
+                          style="display: block"
+                      /></a>
+                    </td>
+                    <td align="center" style="padding: 0 8px">
+                      <a href="#"
+                        ><img
+                          src="https://www.sendible.com/hs-fs/hubfs/blog-import/2024/02-24-Feb/social-media-icons-x-logo-black.png?width=180&height=185&name=social-media-icons-x-logo-black.png"
+                          alt="Twitter"
+                          width="24"
+                          style="display: block"
+                      /></a>
+                    </td>
+                    <td align="center" style="padding: 0 8px">
+                      <a href="#"
+                        ><img
+                          src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/LinkedIn_logo_initials.png/768px-LinkedIn_logo_initials.png"
+                          alt="LinkedIn"
+                          width="24"
+                          style="display: block"
+                      /></a>
+                    </td>
+                    <td align="center" style="padding: 0 8px">
+                      <a href="#"
+                        ><img
+                          src="https://2235233.fs1.hubspotusercontent-na1.net/hubfs/2235233/blog-import/2022/07-22-Jul/every-social-media-logo-and-icon-in-one-handy-place-instagram.png"
+                          alt="Instagram"
+                          width="24"
+                          style="display: block"
+                      /></a>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
 
-        <!-- Footer -->
-        <tr>
-          <td style="padding: 20px; background-color: #f4f4f4; text-align: center;">
-            <p style="font-size: 12px; color: #999;">
-              If you have any questions, feel free to reply to this email or contact our support at support@example.com.
-            </p>
-            <p style="font-size: 12px; color: #999;">© ${new Date().getFullYear()} Forwardcode Techstudio. All rights reserved.</p>
-          </td>
-        </tr>
-      </table>
-    </body>
+            <!-- Footer Section -->
+            <tr style="text-align: center">
+              <td style="padding: 1rem 5rem">
+                <table style="text-align: start">
+                  <tr>
+                    <td style="padding-right: 1rem">
+                      <img
+                        src="${imageSrc}"
+                        alt="Forwardcode TechStudio"
+                        style="
+                          width: 90px;
+                          height: 90px;
+                          background-color: white;
+                          margin-bottom: 1rem;
+                        "
+                      />
+                    </td>
+                    <td>
+                      <p
+                        style="font-size: 14px; font-weight: bold; color: #333"
+                      >
+                        TEAM HR
+                      </p>
+                      <p style="font-size: 12px; color: #5e5e5e">
+                        Forwardcode TechStudio
+                      </p>
+                      <p style="font-size: 12px; color: #5e5e5e">
+                        Jamshedpur, JH - 831018
+                      </p>
+                      <p style="font-size: 12px">hrforwardcode.in</p>
+                      <p style="font-size: 12px; color: black">
+                        Check what's new:
+                        <a href="https://forwardcode.in" style="color: #007bff"
+                          >https://forwardcode.in</a
+                        >
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr>
+              <td
+                style="
+                  padding: 1rem;
+                  background-color: #f4f4f4;
+                  text-align: center;
+                "
+              >
+                <p style="font-size: 8px; margin: 0">
+                  PLEASE CONSIDER THE ENVIRONMENT BEFORE PRINTING THIS EMAIL.
+                </p>
+                <p style="font-size: 8px; margin: 0">
+                  THIS MESSAGE IS INTENDED ONLY FOR THE USE OF THE INDIVIDUAL OR
+                  ENTITY TO WHICH IT IS ADDRESSED AND MAY CONTAIN INFORMATION
+                  THAT IS PRIVILEGED, CONFIDENTIAL AND EXEMPT FROM DISCLOSURE
+                  UNDER APPLICABLE LAW. IF YOU ARE NOT THE INTENDED RECIPIENT,
+                  YOU ARE HEREBY NOTIFIED THAT ANY DISSEMINATION OR COPYING IS
+                  STRICTLY PROHIBITED.
+                </p>
+              </td>
+            </tr>
+
+            <tr>
+              <td
+                style="
+                  padding: 20px;
+                  background-color: #f4f4f4;
+                  text-align: center;
+                "
+              >
+                <p style="font-size: 12px; color: #999">
+                  If you have any questions, feel free to reply to this email or
+                  contact our support at support@example.com.
+                </p>
+                <p style="font-size: 12px; color: #999">
+                  © ${new Date().getFullYear()} Forwardcode Techstudio. All
+                  rights reserved.
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
   `,
   };
 
